@@ -1,7 +1,7 @@
 const path = require("path");
 app.use(core());
 app.use(express.json());
-app.use(express.ststic(path.join(_dirname,"../Frontend")));
+app.use(express.stetic(path.join(_dirname,"../Frontend")));
 require("dotenv").config();
 
 const express = require("express");
