@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Expense Tracker</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- =========================================
+     AUTHENTICATION
+========================================= -->
+
+<section id="auth-section" class="auth-container">
+
+    <div class="auth-card">
+
+        <div class="logo">
+            💰
+        </div>
+
+        <h1>AI Expense Tracker</h1>
+
+        <p class="subtitle">
+            Track smarter. Spend better.
+        </p>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Username"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Password"
+        >
+
+        <div class="auth-buttons">
+
+            <button
+                class="primary-btn"
+                onclick="authenticate('login')">
+                Login
+            </button>
+
+            <button
+                class="secondary-btn"
+                onclick="authenticate('signup')">
+                Create Account
+            </button>
+
+        </div>
+
+        <p id="auth-message"></p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     MAIN APPLICATION
+========================================= -->
+
+<section id="app-section" class="hidden">
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+        <div>
+
+            <h1>💰 AI Expense Tracker</h1>
+
+            <p>
+                Welcome back, <span id="welcome-user"></span>
+            </p>
+
+        </div>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="dashboard">
+
+
+        <!-- =================================
+             SUMMARY CARDS
+        ================================== -->
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    💸
+                </div>
+
+                <div>
+
+                    <p>Total Spent</p>
+
+                    <h2>
+                        ₹<span id="total-spent">0.00</span>
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    🧾
+                </div>
+
+                <div>
+
+                    <p>Total Expenses</p>
+
+                    <h2 id="expense-count">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    📊
+                </div>
+
+                <div>
+
+                    <p>Average Expense</p>
+
+                    <h2>
+                        ₹<span id="average-expense">0.00</span>
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             ADD EXPENSE
+        ================================== -->
+
+        <section class="card add-expense-card">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>Add New Expense</h2>
+
+                    <p>
+                        Let AI automatically categorize your expense.
+                    </p>
+
+                </div>
+
+                <span class="ai-badge">
+                    ✨ AI Powered
+                </span>
+
+            </div>
+
+
+            <div class="expense-form">
+
+                <div class="input-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <input
+                        type="text"
+                        id="desc"
+                        placeholder="e.g. Uber to college"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>
+                        Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        id="amount"
+                        placeholder="e.g. 250"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <button
+                    class="add-btn"
+                    onclick="addExpense()">
+
+                    ✨ Add Expense
+
+                </button>
+
+            </div>
+
+            <p id="expense-message"></p>
+
+        </section>
+
+
+        <!-- =================================
+             CONTENT GRID
+        ================================== -->
+
+        <div class="content-grid">
+
+
+            <!-- =================================
+                 EXPENSE HISTORY
+            ================================== -->
+
+            <section class="card history-card">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <h2>Expense History</h2>
+
+                        <p>
+                            Your recent transactions
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div id="expense-list">
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            🧾
+                        </div>
+
+                        <p>
+                            No expenses yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 CHART
+            ================================== -->
+
+            <section class="card chart-card">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <h2>Spending Breakdown</h2>
+
+                        <p>
+                            Expenses by category
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="expenseChart"></canvas>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================
+             AI INSIGHTS
+        ================================== -->
+
+        <section class="ai-card">
+
+            <div class="ai-header">
+
+                <div class="ai-icon">
+                    ✨
+                </div>
+
+                <div>
+
+                    <h2>
+                        AI Financial Insights
+                    </h2>
+
+                    <p>
+                        Get personalized insights about your spending.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="analysis-btn"
+                onclick="getAIInsights()">
+
+                ✨ Analyze My Spending
+
+            </button>
+
+
+            <div
+                id="ai-response"
+                class="ai-response">
+
+                Your AI-powered financial analysis will appear here.
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</section>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
